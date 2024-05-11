@@ -20,11 +20,11 @@ public class FirstApi {
     @RequestMapping("/hello/{name}/{times}")
     public String repeatHello(@PathVariable("name") String name,
                               @PathVariable("times") int times) {
-        String begin = "";
+        StringBuilder begin = new StringBuilder();
         for (int i = 0; i < times; i++) {
-            begin += "Hello " + name + "! - " + (i+1);
-            begin += "<br>";
+            begin.append("Hello ").append(name).append("! - ").append(i + 1);
+            begin.append("<br>");
         }
-        return begin;
+        return begin.toString();
     }
 }
