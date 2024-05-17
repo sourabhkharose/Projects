@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class StoreProductService implements ProductService{
+public class StoreProductService implements ProductService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -20,26 +20,17 @@ public class StoreProductService implements ProductService{
     }
 
     @Override
-    public Product getSingleProduct(int productId) throws ProductNotFoundException{
-        StoreDto response = restTemplate.getForObject(
-                "https://fakestoreapi.com/products/" + productId, StoreDto.class
-        );
+    public Product getSingleProduct(int productId) throws ProductNotFoundException {
+        StoreDto response = restTemplate.getForObject("https://fakestoreapi.com/products/" + productId, StoreDto.class);
 
-        if(response == null){
-            throw new ProductNotFoundException(
-              "Product with ID " + productId + " not found."
-            );
+        if (response == null) {
+            throw new ProductNotFoundException("Product with ID " + productId + " not found.");
         }
 
         return response.toProduct();
     }
 
-    public Product addProduct(
-            String title,
-            String description,
-            String imageUrl,
-            String category,
-            double price){
+    public Product addProduct(String title, String description, String imageUrl, String category, double price) {
         StoreDto storeDto = new StoreDto();
 
         storeDto.setTitle(title);
@@ -48,19 +39,16 @@ public class StoreProductService implements ProductService{
         storeDto.setCategory(category);
         storeDto.setPrice(price);
 
-        StoreDto response = restTemplate.postForObject(
-                "https://fakestoreapi.com/products/", storeDto, StoreDto.class
-        );
+        StoreDto response = restTemplate.postForObject("https://fakestoreapi.com/products/", storeDto, StoreDto.class);
 
-        return storeDto.toProduct();
+        return response.toProduct();
     }
 
-    public List<Product> getAllProducts(){
-        StoreDto[] response = restTemplate.getForObject(
-                "https://fakestoreapi.com/products/", StoreDto[].class);
+    public List<Product> getAllProducts() {
+        StoreDto[] response = restTemplate.getForObject("https://fakestoreapi.com/products/", StoreDto[].class);
 
         List<Product> products = new ArrayList<>();
-        for(StoreDto storeDto : response){
+        for (StoreDto storeDto : response) {
             products.add(storeDto.toProduct());
         }
         return products;
