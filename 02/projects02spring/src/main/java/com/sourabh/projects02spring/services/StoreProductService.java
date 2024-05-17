@@ -2,9 +2,13 @@ package com.sourabh.projects02spring.services;
 
 import com.sourabh.projects02spring.dtos.ProductResponseDto;
 import com.sourabh.projects02spring.dtos.StoreDto;
+import com.sourabh.projects02spring.exceptions.ProductNotFoundException;
 import com.sourabh.projects02spring.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class StoreProductService implements ProductService{
@@ -16,14 +20,21 @@ public class StoreProductService implements ProductService{
     }
 
     @Override
-    public ProductResponseDto getSingleProduct(int productId) {
-        StoreDto storeDto = restTemplate.getForObject(
+    public Product getSingleProduct(int productId) throws ProductNotFoundException{
+        StoreDto response = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/" + productId, StoreDto.class
         );
-        return storeDto.toProductResponseDto();
+
+        if(response == null){
+            throw new ProductNotFoundException(
+              "Product with ID " + productId + " not found."
+            );
+        }
+
+        return response.toProduct();
     }
 
-    public ProductResponseDto addProduct(
+    public Product addProduct(
             String title,
             String description,
             String imageUrl,
@@ -41,6 +52,17 @@ public class StoreProductService implements ProductService{
                 "https://fakestoreapi.com/products/", storeDto, StoreDto.class
         );
 
-        return storeDto.toProductResponseDto();
+        return storeDto.toProduct();
+    }
+
+    public List<Product> getAllProducts(){
+        StoreDto[] response = restTemplate.getForObject(
+                "https://fakestoreapi.com/products/", StoreDto[].class);
+
+        List<Product> products = new ArrayList<>();
+        for(StoreDto storeDto : response){
+            products.add(storeDto.toProduct());
+        }
+        return products;
     }
 }
