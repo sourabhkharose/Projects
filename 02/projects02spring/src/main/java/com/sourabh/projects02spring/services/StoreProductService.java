@@ -3,6 +3,8 @@ package com.sourabh.projects02spring.services;
 import com.sourabh.projects02spring.dtos.StoreDto;
 import com.sourabh.projects02spring.exceptions.ProductNotFoundException;
 import com.sourabh.projects02spring.models.Product;
+import org.aspectj.weaver.bcel.FakeAnnotation;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -61,5 +63,14 @@ public class StoreProductService implements ProductService {
     @Override
     public List<Product> getAllProductsByCategory(String category) {
         return restTemplate.getForObject("https://fakestoreapi.com/products/category/"+category, List.class);
+    }
+
+    @Override
+    public Product deleteProductById(Long productId) throws ProductNotFoundException {
+        StoreDto productToDelete = restTemplate.exchange("https://fakestoreapi.com/products/" + productId, HttpMethod.DELETE,null, StoreDto.class).getBody();
+        if (productToDelete == null) {
+            throw new ProductNotFoundException("No product found for ID " + productId);
+        }
+        return productToDelete.toProduct();
     }
 }

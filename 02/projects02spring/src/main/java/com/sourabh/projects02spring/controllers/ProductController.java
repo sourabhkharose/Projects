@@ -59,9 +59,16 @@ public class ProductController {
         return new ResponseEntity<>(productService.getAllCategories(), HttpStatus.OK);
     }
 
-    @GetMapping("products/category/{category}")
+    @GetMapping("/products/category/{category}")
     public ResponseEntity<List<Product>> getAllProductsByCategory(@PathVariable("category")String category){
         return new ResponseEntity<>(productService.getAllProductsByCategory(category), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<ProductResponseDto> deleteProductById(@PathVariable("id") Long productId) throws ProductNotFoundException {
+        Product product = productService.deleteProductById(productId);
+        ProductResponseDto productResponseDto = convertToProductResponseDto(product);
+        return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
     }
 
     private ProductResponseDto convertToProductResponseDto(Product product){

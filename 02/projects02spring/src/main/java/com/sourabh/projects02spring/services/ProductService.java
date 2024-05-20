@@ -26,5 +26,7 @@ public interface ProductService {
     public List<String> getAllCategories();
 
     public List<Product> getAllProductsByCategory(String category);
+
+    public  Product deleteProductById(Long productId) throws ProductNotFoundException;
 }
 

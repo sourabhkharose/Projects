@@ -80,4 +80,14 @@ public class SelfProductService implements ProductService{
         }
         return products;//todo
     }
+
+    @Override
+    public Product deleteProductById(Long productId) throws ProductNotFoundException {
+        Product productToDelete = productRepository.findProductById(productId);
+        if(productToDelete == null){
+            throw new ProductNotFoundException("No product found for ID " + productId);
+        }
+        productRepository.delete(productToDelete);
+        return productToDelete;
+    }
 }
