@@ -1,5 +1,6 @@
 package com.sourabh.projects02spring.services;
 
+import com.sourabh.projects02spring.dtos.StoreDto;
 import com.sourabh.projects02spring.exceptions.ProductNotFoundException;
 import com.sourabh.projects02spring.models.Category;
 import com.sourabh.projects02spring.models.Product;
@@ -8,6 +9,7 @@ import com.sourabh.projects02spring.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("selfProductService")
@@ -57,11 +59,25 @@ public class SelfProductService implements ProductService{
 
     @Override
     public List<String> getAllCategories() {
-        return List.of(); //todo
+        List<Category> category = categoryRepository.findAll();
+        List<String> categories = new ArrayList<>();
+        for (Category c : category) {
+            categories.add(c.getTitle());
+        }
+        return categories;
     }
 
     @Override
     public List<Product> getAllProductsByCategory(String category) {
-        return List.of(); //todo
+        Category categoryInDb = categoryRepository.findByTitle("Electronics");
+        Long categoryId = categoryInDb.getId();
+        List<Product> products = new ArrayList<>();
+        List<Product> productList = getAllProducts();
+        for (Product p : productList) {
+            if (categoryId.equals(p.getCategory().getId())) {
+                products.add(p);
+            }
+        }
+        return products;//todo
     }
 }
