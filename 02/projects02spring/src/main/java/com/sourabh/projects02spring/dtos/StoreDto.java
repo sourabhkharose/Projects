@@ -12,7 +12,7 @@ public class StoreDto {
     private String title;
     private String description;
     private Double price;
-    private String image;
+    private String imageUrl;
     private String category;
 
     public Product toProduct() {
@@ -21,7 +21,7 @@ public class StoreDto {
         product.setTitle(title);
         product.setDescription(description);
         product.setPrice(price);
-        product.setImageUrl(image);
+        product.setImageUrl(imageUrl);
         Category categoryObj = new Category();
         categoryObj.setTitle(category);
         product.setCategory(categoryObj);

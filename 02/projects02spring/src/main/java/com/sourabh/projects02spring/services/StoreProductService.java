@@ -1,6 +1,5 @@
 package com.sourabh.projects02spring.services;
 
-import com.sourabh.projects02spring.dtos.ProductResponseDto;
 import com.sourabh.projects02spring.dtos.StoreDto;
 import com.sourabh.projects02spring.exceptions.ProductNotFoundException;
 import com.sourabh.projects02spring.models.Product;
@@ -10,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("storeProductService")
 public class StoreProductService implements ProductService {
 
     private RestTemplate restTemplate = new RestTemplate();
@@ -20,7 +19,7 @@ public class StoreProductService implements ProductService {
     }
 
     @Override
-    public Product getSingleProduct(int productId) throws ProductNotFoundException {
+    public Product getSingleProduct(Long productId) throws ProductNotFoundException {
         StoreDto response = restTemplate.getForObject("https://fakestoreapi.com/products/" + productId, StoreDto.class);
 
         if (response == null) {
@@ -35,7 +34,7 @@ public class StoreProductService implements ProductService {
 
         storeDto.setTitle(title);
         storeDto.setDescription(description);
-        storeDto.setImage(imageUrl);
+        storeDto.setImageUrl(imageUrl);
         storeDto.setCategory(category);
         storeDto.setPrice(price);
 
@@ -52,5 +51,15 @@ public class StoreProductService implements ProductService {
             products.add(storeDto.toProduct());
         }
         return products;
+    }
+
+    @Override
+    public List<String> getAllCategories() {
+        return restTemplate.getForObject("https://fakestoreapi.com/products/categories", List.class);
+    }
+
+    @Override
+    public List<Product> getAllProductsByCategory(String category) {
+        return restTemplate.getForObject("https://fakestoreapi.com/products/category/"+category, List.class);
     }
 }

@@ -10,6 +10,6 @@ public class ProductResponseDto {
     private String title;
     private String description;
     private Double price;
-    private String image;
+    private String imageUrl;
     private String category;
 }
