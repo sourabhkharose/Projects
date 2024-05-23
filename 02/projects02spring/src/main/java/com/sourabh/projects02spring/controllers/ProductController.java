@@ -37,7 +37,7 @@ public class ProductController {
         Product product =  productService.addProduct(
                 productResponseDto.getTitle(),
                 productResponseDto.getDescription(),
-                productResponseDto.getImageUrl(),
+                productResponseDto.getImage(),
                 productResponseDto.getCategory(),
                 productResponseDto.getPrice()
         );

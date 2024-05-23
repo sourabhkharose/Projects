@@ -33,21 +33,21 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public Product addProduct(String title, String description, String imageUrl, String Category, double price) {
+    public Product addProduct(String title, String description, String image, String category, double price) {
         Product newProduct = new Product();
         newProduct.setTitle(title);
         newProduct.setDescription(description);
-        newProduct.setImageUrl(imageUrl);
+        newProduct.setImage(image);
         newProduct.setPrice(price);
 
-        Category category = categoryRepository.findByTitle(title);
+        Category categoryInDb = categoryRepository.findByTitle(category);
 
-        if(category == null){
+        if(categoryInDb == null){
             Category newcategory = new Category();
-            newcategory.setTitle(title);
-            category = newcategory;
+            newcategory.setTitle(category);
+            categoryInDb = newcategory;
         }
-        newProduct.setCategory(category);
+        newProduct.setCategory(categoryInDb);
         Product savedProduct = productRepository.save(newProduct);
         return savedProduct;
     }
@@ -78,7 +78,7 @@ public class SelfProductService implements ProductService{
                 products.add(p);
             }
         }
-        return products;//todo
+        return products;//todo -- get category obj by Title, pass obj to prod repo. List<Products> prod = prodrepo.findByCat(catObj)
     }
 
     @Override

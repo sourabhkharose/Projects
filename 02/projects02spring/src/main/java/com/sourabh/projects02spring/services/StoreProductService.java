@@ -31,12 +31,12 @@ public class StoreProductService implements ProductService {
         return response.toProduct();
     }
 
-    public Product addProduct(String title, String description, String imageUrl, String category, double price) {
+    public Product addProduct(String title, String description, String image, String category, double price) {
         StoreDto storeDto = new StoreDto();
 
         storeDto.setTitle(title);
         storeDto.setDescription(description);
-        storeDto.setImageUrl(imageUrl);
+        storeDto.setImage(image);
         storeDto.setCategory(category);
         storeDto.setPrice(price);
 
@@ -52,7 +52,7 @@ public class StoreProductService implements ProductService {
         for (StoreDto storeDto : response) {
             products.add(storeDto.toProduct());
         }
-        return products;
+        return products; //todo -- check why imageURL is null
     }
 
     @Override

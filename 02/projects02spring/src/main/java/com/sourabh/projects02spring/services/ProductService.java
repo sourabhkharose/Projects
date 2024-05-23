@@ -16,7 +16,7 @@ public interface ProductService {
     public Product addProduct(
             String title,
             String Description,
-            String imageUrl,
+            String image,
             String Category,
             double price
     );
