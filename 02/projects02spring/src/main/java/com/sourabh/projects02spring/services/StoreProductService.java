@@ -52,7 +52,7 @@ public class StoreProductService implements ProductService {
         for (StoreDto storeDto : response) {
             products.add(storeDto.toProduct());
         }
-        return products; //todo -- check why imageURL is null
+        return products;
     }
 
     @Override
