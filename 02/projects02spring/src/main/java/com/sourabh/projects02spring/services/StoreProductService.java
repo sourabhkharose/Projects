@@ -48,6 +48,7 @@ public class StoreProductService implements ProductService {
         StoreDto[] response = restTemplate.getForObject("https://fakestoreapi.com/products/", StoreDto[].class);
 
         List<Product> products = new ArrayList<>();
+        assert response != null;
         for (StoreDto storeDto : response) {
             products.add(storeDto.toProduct());
         }

@@ -1,9 +1,7 @@
 package com.sourabh.projects02spring.controllers;
 
-import com.sourabh.projects02spring.dtos.ErrorDto;
 import com.sourabh.projects02spring.dtos.ProductResponseDto;
 import com.sourabh.projects02spring.exceptions.ProductNotFoundException;
-import com.sourabh.projects02spring.models.Category;
 import com.sourabh.projects02spring.models.Product;
 import com.sourabh.projects02spring.services.ProductService;
 import org.modelmapper.ModelMapper;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 

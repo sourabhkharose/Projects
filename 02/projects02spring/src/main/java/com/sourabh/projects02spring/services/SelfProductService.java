@@ -1,14 +1,11 @@
 package com.sourabh.projects02spring.services;
 
-import com.sourabh.projects02spring.dtos.StoreDto;
 import com.sourabh.projects02spring.exceptions.ProductNotFoundException;
 import com.sourabh.projects02spring.models.Category;
 import com.sourabh.projects02spring.models.Product;
 import com.sourabh.projects02spring.repositories.CategoryRepository;
 import com.sourabh.projects02spring.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +45,7 @@ public class SelfProductService implements ProductService{
             categoryInDb = newcategory;
         }
         newProduct.setCategory(categoryInDb);
-        Product savedProduct = productRepository.save(newProduct);
-        return savedProduct;
+        return productRepository.save(newProduct);
     }
 
     @Override
