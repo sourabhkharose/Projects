@@ -3,7 +3,6 @@ package com.sourabh.projects02spring.services;
 import com.sourabh.projects02spring.dtos.StoreDto;
 import com.sourabh.projects02spring.exceptions.ProductNotFoundException;
 import com.sourabh.projects02spring.models.Product;
-import org.aspectj.weaver.bcel.FakeAnnotation;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -61,8 +60,16 @@ public class StoreProductService implements ProductService {
     }
 
     @Override
-    public List<Product> getAllProductsByCategory(String category) {
-        return restTemplate.getForObject("https://fakestoreapi.com/products/category/"+category, List.class);
+    public List<Product> getAllProductsByCategory(String category) throws ProductNotFoundException {
+        StoreDto[] productList = restTemplate.getForObject("https://fakestoreapi.com/products/category/"+category, StoreDto[].class);
+        List<Product> allProducts = new ArrayList<>();
+        for (StoreDto storeDto : productList) {
+            allProducts.add(storeDto.toProduct());
+        }
+        if(allProducts.isEmpty()){
+                throw new ProductNotFoundException("No products with category '" + category + "' found");
+        }
+        return allProducts;
     }
 
     @Override
@@ -72,5 +79,20 @@ public class StoreProductService implements ProductService {
             throw new ProductNotFoundException("No product found for ID " + productId);
         }
         return productToDelete.toProduct();
+    }
+
+    @Override
+    public Product updateProduct(Long productId, String title, String description, String image, String category, double price) throws ProductNotFoundException {
+        StoreDto requestDto = new StoreDto();
+        requestDto.setTitle(title);
+        requestDto.setDescription(description);
+        requestDto.setImage(image);
+        requestDto.setCategory(category);
+        requestDto.setPrice(price);
+
+        StoreDto response = requestDto;
+        response.setId(productId);
+        return response.toProduct();
+        //todo : not functional yet.
     }
 }

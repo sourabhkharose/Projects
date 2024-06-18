@@ -69,16 +69,7 @@ public class SelfProductService implements ProductService{
 
     @Override
     public List<Product> getAllProductsByCategory(String category) {
-        Category categoryInDb = categoryRepository.findByTitle("Electronics");
-        Long categoryId = categoryInDb.getId();
-        List<Product> products = new ArrayList<>();
-        List<Product> productList = getAllProducts();
-        for (Product p : productList) {
-            if (categoryId.equals(p.getCategory().getId())) {
-                products.add(p);
-            }
-        }
-        return products;//todo -- get category obj by Title, pass obj to prod repo. List<Products> prod = prodrepo.findByCat(catObj)
+        return productRepository.findAllByCategory_Title(category);
     }
 
     @Override
@@ -90,4 +81,35 @@ public class SelfProductService implements ProductService{
         productRepository.delete(productToDelete);
         return productToDelete;
     }
+
+    @Override
+    public Product updateProduct(Long productId, String title, String Description, String image, String Category, double price) throws ProductNotFoundException {
+        Product productToUpdate = productRepository.findProductById(productId);
+        if(productToUpdate == null){
+            throw new ProductNotFoundException("No product found for ID " + productId);
+        }
+        if(title != null){
+            productToUpdate.setTitle(title);
+        }
+        if(Description != null){
+            productToUpdate.setDescription(Description);
+        }
+        if(image != null){
+            productToUpdate.setImage(image);
+        }
+        if(price != 0){
+            productToUpdate.setPrice(price);
+        }
+        if(Category != null){
+            Category categoryInDb = categoryRepository.findByTitle(Category);
+            if(categoryInDb == null){
+                Category newcategory = new Category();
+                newcategory.setTitle(Category);
+                categoryInDb = newcategory;
+            }
+            productToUpdate.setCategory(categoryInDb);
+        }
+        return productRepository.save(productToUpdate);
+    }
+
 }

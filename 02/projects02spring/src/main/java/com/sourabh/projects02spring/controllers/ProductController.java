@@ -16,23 +16,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/products")
 public class ProductController {
 
     private ProductService productService;
     private ModelMapper modelMapper;
 
-    public ProductController(@Qualifier("selfProductService") ProductService productService, ModelMapper modelMapper) {
+    public ProductController(@Qualifier("storeProductService") ProductService productService, ModelMapper modelMapper) {
         this.productService = productService;
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ProductResponseDto> getSingleProduct(@PathVariable("id") Long productId) throws ProductNotFoundException {
         Product product = productService.getSingleProduct(productId);
         return new ResponseEntity<>(convertToProductResponseDto(product), HttpStatus.OK);
     }
 
-    @PostMapping("/products")
+    @PostMapping()
     public ResponseEntity<ProductResponseDto> addProduct(@RequestBody ProductResponseDto productResponseDto){
         Product product =  productService.addProduct(
                 productResponseDto.getTitle(),
@@ -44,7 +45,7 @@ public class ProductController {
         return new ResponseEntity<>(convertToProductResponseDto(product), HttpStatus.CREATED);
     }
 
-    @GetMapping("/products")
+    @GetMapping()
     public List<ProductResponseDto> getAllProducts(){
         List<Product> products = productService.getAllProducts();
         List<ProductResponseDto> productResponseDtos = new ArrayList<>();
@@ -54,21 +55,32 @@ public class ProductController {
         return productResponseDtos;
     }
 
-    @GetMapping("/products/categories")
+    @GetMapping("categories")
     public ResponseEntity<List<String>> getAllCategories(){
         return new ResponseEntity<>(productService.getAllCategories(), HttpStatus.OK);
     }
 
-    @GetMapping("/products/category/{category}")
-    public ResponseEntity<List<Product>> getAllProductsByCategory(@PathVariable("category")String category){
-        return new ResponseEntity<>(productService.getAllProductsByCategory(category), HttpStatus.OK);
+    @GetMapping("category/{category}")
+    public ResponseEntity<List<ProductResponseDto>> getAllProductsByCategory(@PathVariable("category")String category) throws ProductNotFoundException {
+        List<Product> products = productService.getAllProductsByCategory(category);
+        List<ProductResponseDto> productResponseDtos = new ArrayList<>();
+        for(Product product : products){
+            productResponseDtos.add(convertToProductResponseDto(product));
+        }
+        return new ResponseEntity<>(productResponseDtos, HttpStatus.OK);
     }
 
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<ProductResponseDto> deleteProductById(@PathVariable("id") Long productId) throws ProductNotFoundException {
         Product product = productService.deleteProductById(productId);
         ProductResponseDto productResponseDto = convertToProductResponseDto(product);
         return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable("id") Long productId, @RequestBody ProductResponseDto productResponseDto) throws ProductNotFoundException {
+        Product product = productService.updateProduct(productId, productResponseDto.getTitle(), productResponseDto.getDescription(), productResponseDto.getImage(), productResponseDto.getCategory(), productResponseDto.getPrice());
+        return new ResponseEntity<>(convertToProductResponseDto(product), HttpStatus.OK);
     }
 
     private ProductResponseDto convertToProductResponseDto(Product product){
