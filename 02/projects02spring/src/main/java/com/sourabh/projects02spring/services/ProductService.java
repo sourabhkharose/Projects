@@ -1,9 +1,6 @@
 package com.sourabh.projects02spring.services;
 
-import com.sourabh.projects02spring.dtos.ProductResponseDto;
-import com.sourabh.projects02spring.dtos.StoreDto;
 import com.sourabh.projects02spring.exceptions.ProductNotFoundException;
-import com.sourabh.projects02spring.models.Category;
 import com.sourabh.projects02spring.models.Product;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +8,9 @@ import java.util.List;
 
 @Service
 public interface ProductService {
-    public Product getSingleProduct(Long productId) throws ProductNotFoundException;
+    Product getSingleProduct(Long productId) throws ProductNotFoundException;
 
-    public Product addProduct(
+    Product addProduct(
             String title,
             String Description,
             String image,
@@ -21,14 +18,14 @@ public interface ProductService {
             double price
     );
 
-    public List<Product> getAllProducts();
+    List<Product> getAllProducts();
 
-    public List<String> getAllCategories();
+    List<String> getAllCategories();
 
-    public List<Product> getAllProductsByCategory(String category) throws ProductNotFoundException;
+    List<Product> getAllProductsByCategory(String category) throws ProductNotFoundException;
 
-    public  Product deleteProductById(Long productId) throws ProductNotFoundException;
+    Product deleteProductById(Long productId) throws ProductNotFoundException;
 
-    public  Product updateProduct(Long productId, String title, String Description, String image, String Category, double price) throws ProductNotFoundException;
+    Product updateProduct(Long productId, String title, String Description, String image, String Category, double price) throws ProductNotFoundException;
 }
 
