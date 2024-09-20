@@ -31,7 +31,6 @@ public class Player {
                     System.out.println("Invalid row number. Please enter again: ");
                 }
             } while (row < 0 || row >= board.getDimension());
-
             //column
             do {
                 System.out.println("Enter column number: ");
